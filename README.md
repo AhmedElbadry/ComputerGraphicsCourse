@@ -1,7 +1,7 @@
 # ComputerGraphicsCourse
 
 ### Assignment 1
-**Description:** Draw as much regular polygon as you can.
+**Description:** Draw as much regular polygons as you can.
 
 I created a function called `drawPolygon` which takes an `int` as a parameter and creates a regular polygon that has the same number of sides as the parameter.
 
