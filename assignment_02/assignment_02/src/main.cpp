@@ -14,16 +14,16 @@ const float WINDOW_HEIGHT = 700.0;
 
 float CR = 200.0f;
 
-BST tree;
+BST tree(WINDOW_WIDTH, WINDOW_HEIGHT);
 
 
-void init(void)
+void initGL(void)
 {
 	glLoadIdentity();
 	glClearColor(1.0, 1.0, 1.0, 0.0); //specifies clear values for the color buffers(R, G, B, Alpha)
 	glMatrixMode(GL_PROJECTION); // sets the current matrix mode
 	gluOrtho2D(0.0, WINDOW_WIDTH, 0.0, WINDOW_HEIGHT); //2D orthographic projection matrix(left, right, bottom, top)
-}/*void BST::BST__draw() {}*/
+}/*void BST::BST__draw() {}*/
 void displayText(float x, float y, const char *string) {
 	int j = strlen(string);
 
@@ -82,7 +82,7 @@ void main(int argc, char** argv)
 	glutInitWindowPosition(0, 0);
 	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	glutCreateWindow("Binary Search Tree Visualization");
-	init();
+	initGL();
 	glutReshapeFunc(handleResize);
 	glutDisplayFunc(mainLoop);
 	glutIdleFunc(mainLoop);

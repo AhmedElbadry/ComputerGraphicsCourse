@@ -3,7 +3,11 @@
 class BST {
 public:
 	int levels;
+	float levelHeight;
+	float WINDOW_WIDTH;
+	float WINDOW_HEIGHT;
 	BST();
+	BST(float w, float h);
 	Node* root;
 	int insert(int x);
 	void print();
