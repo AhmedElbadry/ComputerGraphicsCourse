@@ -130,7 +130,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\BST__drawing.cpp" />
     <ClCompile Include="src\BST.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Node.cpp" />

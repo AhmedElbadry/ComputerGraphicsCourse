@@ -10,11 +10,7 @@ using namespace std;
 BST::BST() {
 	root = NULL;
 }
-BST::BST(float w, float h) {
-	root = NULL;
-	WINDOW_WIDTH = w;
-	WINDOW_HEIGHT = h;
-}
+
 int BST::insert(int x) {
 	Node* currNode = root;
 	Node* r = root;
