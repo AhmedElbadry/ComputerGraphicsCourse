@@ -8,3 +8,7 @@ Node::Node(int x) {
 	left = NULL;
 	right = NULL;
 }
+
+void Node::connectWithChildren() {
+
+}

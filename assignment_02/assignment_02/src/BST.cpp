@@ -1,7 +1,9 @@
 #include "BST.h"
+#include "Node.h"
+#include<algorithm>
 #include<stdlib.h>
 #include<iostream>
-#include "Node.h"
+
 using namespace std;
 
 
@@ -33,7 +35,7 @@ int BST::insert(int x) {
 	
 
 	cout << x << " node added" << endl;
-
+	update();
 	return 1;
 
 }
@@ -45,7 +47,11 @@ void BST::print() {
 
 void BST::print__private(Node* node) {
 	if (node) {
-		cout << node->data << endl;
+		cout << endl;
+		cout << "Node = " << node->data << endl;
+		cout << "level = " << node->level << endl;
+		cout << "col = " << node->col << endl;
+		cout << endl;
 		print__private(node->left);
 		print__private(node->right);
 	}
@@ -170,25 +176,6 @@ void BST::deleteNode(int x) {
 
 		delete currNode;
 	}
-
+	update();
 }
 
-/*
-void BST::deleteNode(int x) {
-
-}
-
-Node* BST::deleteNode__private(Node* node, int x) {
-	if (node == NULL) return node;
-	else if (x < node->data) {
-		node->left = deleteNode__private(node->left, x);
-	}
-	else if (x > node->data) {
-		node->right = deleteNode__private(node->right, x);
-	}
-	else{
-		if (node->left == NULL && node->right == NULL) {
-			delete 
-		}
-	}
-}*/

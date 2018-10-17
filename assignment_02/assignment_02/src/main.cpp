@@ -2,14 +2,19 @@
 #include<glut.h>
 #include<math.h>
 #include "BST.h"
-#define PI acos(-1)
-
 using namespace std;
 
+
+#define PI acos(-1)
 const float WINDOW_WIDTH = 1100.0;
 const float WINDOW_HEIGHT = 700.0;
 
+
+
+
 float CR = 200.0f;
+
+BST tree;
 
 
 void init(void)
@@ -18,7 +23,7 @@ void init(void)
 	glClearColor(1.0, 1.0, 1.0, 0.0); //specifies clear values for the color buffers(R, G, B, Alpha)
 	glMatrixMode(GL_PROJECTION); // sets the current matrix mode
 	gluOrtho2D(0.0, WINDOW_WIDTH, 0.0, WINDOW_HEIGHT); //2D orthographic projection matrix(left, right, bottom, top)
-}
+}/*void BST::BST__draw() {}*/
 void displayText(float x, float y, const char *string) {
 	int j = strlen(string);
 
@@ -61,19 +66,17 @@ void handleResize(int width, int height) {
 
 void main(int argc, char** argv)
 {
-	BST tree;
 
 	tree.insert(20);
 	tree.insert(10);
-	tree.insert(15);
-	tree.insert(7);
+	//tree.insert(15);
+	//tree.insert(7);
 	tree.insert(30);
-	tree.insert(40);
-	tree.insert(25);
-	tree.insert(23);
+	//tree.insert(40);
+	//tree.insert(25);
+	//tree.insert(23);
 	tree.print();
-	tree.deleteNode(30);
-	tree.print();
+	//tree.update();
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB); 
 	glutInitWindowPosition(0, 0);
