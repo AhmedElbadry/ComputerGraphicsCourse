@@ -1,6 +1,7 @@
 #include<iostream>
 #include<glut.h>
 #include<math.h>
+#include "BST.h"
 #define PI acos(-1)
 
 using namespace std;
@@ -24,7 +25,7 @@ void displayText(float x, float y, const char *string) {
 	glRasterPos2f(x, y);
 	for (int i = 0; i < j; i++) {
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, string[i]);
-		cout << glutBitmapWidth(GLUT_BITMAP_HELVETICA_18, string[i]) << endl;
+		//cout << glutBitmapWidth(GLUT_BITMAP_HELVETICA_18, string[i]) << endl;
 	}
 }
 void drawCircle(float x, float y, float r) {
@@ -60,6 +61,19 @@ void handleResize(int width, int height) {
 
 void main(int argc, char** argv)
 {
+	BST tree;
+
+	tree.insert(20);
+	tree.insert(10);
+	tree.insert(15);
+	tree.insert(7);
+	tree.insert(30);
+	tree.insert(40);
+	tree.insert(25);
+	tree.insert(23);
+	tree.print();
+	tree.deleteNode(25);
+	tree.print();
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB); 
 	glutInitWindowPosition(0, 0);
@@ -71,5 +85,7 @@ void main(int argc, char** argv)
 	glutIdleFunc(mainLoop);
 	glutMainLoop();
 
+
+	
 
 }
