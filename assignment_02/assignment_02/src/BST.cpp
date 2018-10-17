@@ -1,19 +1,9 @@
 #include "BST.h"
 #include<stdlib.h>
 #include<iostream>
-
+#include "Node.h"
 using namespace std;
 
-
-Node::Node() {
-	left = NULL;
-	right = NULL;
-}
-Node::Node(int x) {
-	data = x;
-	left = NULL;
-	right = NULL;
-}
 
 BST::BST() {
 	root = NULL;
@@ -122,7 +112,20 @@ void BST::deleteNode(int x) {
 		}
 
 		if (maxLeft == currNode->left) {
+			//maxLeftRoot->right = NULL;
+			//maxLeft->left = currNode->left;
+			maxLeft->right = currNode->right;
 
+			//if (currNode == root)
+				//root = maxLeft;
+
+			if (x < r->data) {
+				r->left = maxLeft;
+			}
+			else {
+				r->right = maxLeft;
+			}
+			delete currNode;
 		}
 		else {
 			maxLeftRoot->right = NULL;

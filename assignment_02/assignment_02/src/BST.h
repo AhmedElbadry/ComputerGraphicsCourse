@@ -1,11 +1,5 @@
 #pragma once
-struct Node {
-	int data;
-	Node* left;
-	Node* right;
-	Node();
-	Node(int);
-};
+#include "Node.h"
 class BST {
 public:
 	BST();

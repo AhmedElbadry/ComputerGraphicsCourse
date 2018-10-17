@@ -72,7 +72,7 @@ void main(int argc, char** argv)
 	tree.insert(25);
 	tree.insert(23);
 	tree.print();
-	tree.deleteNode(10);
+	tree.deleteNode(30);
 	tree.print();
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB); 
