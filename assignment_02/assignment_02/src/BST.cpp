@@ -91,7 +91,7 @@ Node* BST::findMax__private(Node* node) {
 
 	return node;
 }
-/*
+
 void BST::deleteNode(int x) {
 	Node* currNode = root;
 	Node* r = root;
@@ -120,17 +120,27 @@ void BST::deleteNode(int x) {
 			maxLeftRoot = maxLeft;
 			maxLeft = maxLeft->right;
 		}
-		maxLeftRoot->right = NULL;
-		Node* temp = currNode;
-		maxLeft->left = currNode->left;
-		maxLeft->right = currNode->right;
-		
-		if (x < r->data) {
-			r->left = maxLeft;
+
+		if (maxLeft == currNode->left) {
+
 		}
 		else {
-			r->right = maxLeft;
+			maxLeftRoot->right = NULL;
+			maxLeft->left = currNode->left;
+			maxLeft->right = currNode->right;
+
+			if (currNode == root)
+				root = maxLeft;
+
+			if (x < r->data) {
+				r->left = maxLeft;
+			}
+			else {
+				r->right = maxLeft;
+			}
+			delete currNode;
 		}
+		
 
 	}
 	else if (currNode->left) {
@@ -158,4 +168,24 @@ void BST::deleteNode(int x) {
 		delete currNode;
 	}
 
+}
+
+/*
+void BST::deleteNode(int x) {
+
+}
+
+Node* BST::deleteNode__private(Node* node, int x) {
+	if (node == NULL) return node;
+	else if (x < node->data) {
+		node->left = deleteNode__private(node->left, x);
+	}
+	else if (x > node->data) {
+		node->right = deleteNode__private(node->right, x);
+	}
+	else{
+		if (node->left == NULL && node->right == NULL) {
+			delete 
+		}
+	}
 }*/
