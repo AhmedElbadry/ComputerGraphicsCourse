@@ -7,7 +7,7 @@ using namespace std;
 class Modal
 {
 public:
-	Modal(string nn, double xx, double yy, double ww, double hh, Color cc, Button colse);
+	Modal(string nn, double xx, double yy, double ww, double hh, Color cc);
 	string name;
 	double x;
 	double y;
@@ -17,10 +17,9 @@ public:
 
 	string inputText;
 
-	Button close;
-
 	void draw();
 	void updateInputText(string inputText);
+	void close();
 
 private:
 

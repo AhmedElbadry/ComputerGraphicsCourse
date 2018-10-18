@@ -25,9 +25,11 @@ const double CLOSE_BUTTON_MARGIN = 10;
 const double CLOSE_BUTTON_WIDTH = 40;
 const double CLOSE_BUTTON_HEIGHT = 40;
 
+double modalX = WINDOW_WIDTH / 2;
+double modalY = WINDOW_HEIGHT / 2;
+
 
 string inputHolder;
-
 Color buttonColor(0.0, 1.0, 0.0);
 Color moadalColor(0.0, 1.0, 0.0);
 Color closeButtonColor(0.0, 0.0, 1.0);
@@ -48,22 +50,25 @@ Button addButton(
 	buttonColor
 );
 
+Button closeButton(
+	"CLOSE",
+	modalX + MODAL_WIDTH / 2 - CLOSE_BUTTON_WIDTH / 2 - CLOSE_BUTTON_MARGIN,
+	modalY + MODAL_HEIGHT / 2 - CLOSE_BUTTON_HEIGHT / 2 - CLOSE_BUTTON_MARGIN,
+	CLOSE_BUTTON_WIDTH,
+	CLOSE_BUTTON_HEIGHT,
+	closeButtonColor
+);
+
 Modal addModal(
 	"ADD",
-	WINDOW_WIDTH/2,
-	WINDOW_HEIGHT/2,
+	modalX,
+	modalY,
 	MODAL_WIDTH,
 	MODAL_HEIGHT,
-	moadalColor,
-	Button(
-		"close",
-		WINDOW_WIDTH / 2 + MODAL_WIDTH/2 - CLOSE_BUTTON_MARGIN,
-		WINDOW_HEIGHT / 2 + MODAL_HEIGHT / 2 - CLOSE_BUTTON_MARGIN,
-		CLOSE_BUTTON_WIDTH,
-		CLOSE_BUTTON_HEIGHT,
-		closeButtonColor
-	)
+	moadalColor
 );
+
+
 
 BST tree;
 
@@ -219,6 +224,7 @@ void mainLoop() {
 
 	if (state.addModalOpenned) {
 		addModal.draw();
+		closeButton.draw();
 	}
 	glFlush();
 }
@@ -230,7 +236,7 @@ void handleResize(int width, int height) {
 
 void main(int argc, char** argv)
 {
-
+	addModal.inputText = "11";
 	tree.insert(20);
 	tree.insert(10);
 	tree.insert(15);
@@ -280,14 +286,25 @@ bool Button::checkForMouseClick(int mouseX, int mouseY) {
 }
 
 void Button::buttonClicked() {
+	cout << "button clicked = " << name << endl;
 	if(name == "ADD")
 		state.addModalOpenned = true;
+	if (name == "CLOSE")
+		closeAllModals();
 }
 void mouse(int button, int state, int x, int y) {
 	y = WINDOW_HEIGHT - y;
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
 		addButton.checkForMouseClick(x, y);
+		closeButton.checkForMouseClick(x, y);
 	}
 }
 
+void closeAllModals() {
+	addModal.close();
+}
 
+void Modal::close() {
+	state.addModalOpenned = false;
+	addModal.inputText = "";
+}

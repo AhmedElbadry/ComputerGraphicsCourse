@@ -4,14 +4,13 @@
 #include<glut.h>
 #include"button.h"
 using namespace std;
-Modal::Modal(string nn, double xx, double yy, double ww, double hh, Color cc, Button cl) {
+Modal::Modal(string nn, double xx, double yy, double ww, double hh, Color cc) {
 	name = nn;
 	x = xx;
 	y = yy;
 	width = ww;
 	height = hh;
 	color = cc;
-	close = cl;
 }
 
 void Modal::draw() {
@@ -24,7 +23,6 @@ void Modal::draw() {
 		glVertex2f(x + halfWidth, y + hafHeight);
 		glVertex2f(x + halfWidth, y - hafHeight);
 		glVertex2f(x - halfWidth, y - hafHeight);
-		close.draw();
 	glEnd();
 }
 
