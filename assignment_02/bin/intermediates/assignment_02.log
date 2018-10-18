@@ -1,4 +1,8 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(376,5): warning MSB8004: Intermediate Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Intermediate Directory.
+  button.cpp
+  global.cpp
   main.cpp
-c:\users\ahmed\desktop\computergraphicscourse\assignment_02\assignment_02\src\main.cpp(238): warning C4326: return type of 'main' should be 'int' instead of 'void'
+c:\users\ahmed\desktop\computergraphicscourse\assignment_02\assignment_02\src\main.cpp(232): warning C4326: return type of 'main' should be 'int' instead of 'void'
+  modal.cpp
+  Generating Code...
   assignment_02.vcxproj -> C:\Users\Ahmed\Desktop\ComputerGraphicsCourse\assignment_02\bin\Debug\assignment_02.exe

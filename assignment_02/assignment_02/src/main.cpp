@@ -33,6 +33,7 @@ string inputHolder;
 Color buttonColor(0.0, 1.0, 0.0);
 Color moadalColor(0.0, 1.0, 0.0);
 Color closeButtonColor(0.0, 0.0, 1.0);
+Color textColor(1.0, 1.0, 1.0);
 int levels;
 double levelHeight;
 double nodeRadius;
@@ -102,23 +103,16 @@ void Node::draw() {
 	connectWithChildren();
 	drawText();
 }
+
 void Node::drawText() {
 
-	char tmp[10];
-	int theData = data;
-
-	int index = 0;
-	while (theData) {
-		tmp[index] = '0' + theData % 10;
-		theData /= 10;
-		index++ ;
-	}
-	char str[10];
-	for (int i = 0; i < index; i++) 
-		str[i] = tmp[index - i - 1];
-	
-	::drawText(x, y, str);
+	string str = to_string(data);
+	::drawText(x, y, textColor,str);
 }
+
+
+
+
 void BST::update() {
 
 	levels = getLevel__private(root);
@@ -177,20 +171,20 @@ void Node::connectWithChildren() {
 }
 
 
-void drawText(double x, double y, const char *string) {
-	glColor3f(0.0, 0.0, 0.0);
+void drawText(double x, double y, Color cc, string str) {
+	glColor3f(cc.r, cc.g, cc.b);
 	
-	int j = strlen(string);
+	int j = str.length();
 
 	double textWidth = 0;
 
 	for (int i = 0; i < j; i++) {
-		textWidth += glutBitmapWidth(GLUT_BITMAP_HELVETICA_18, string[i]);
+		textWidth += glutBitmapWidth(GLUT_BITMAP_HELVETICA_18, str[i]);
 	}
 
 	glRasterPos2f(x - textWidth/2, y);
 	for (int i = 0; i < j; i++) {
-		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, string[i]);
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, str[i]);
 		
 	}
 }
@@ -259,6 +253,7 @@ void main(int argc, char** argv)
 	initGL();
 	glutReshapeFunc(handleResize);
 	glutMouseFunc(mouse);
+	glutKeyboardFunc(handleKeypress);
 	glutDisplayFunc(mainLoop);
 	glutIdleFunc(mainLoop);
 	glutMainLoop();
@@ -299,7 +294,22 @@ void mouse(int button, int state, int x, int y) {
 		closeButton.checkForMouseClick(x, y);
 	}
 }
+void handleKeypress(unsigned char key, //The key that was pressed
+	int x, int y) {    //The current mouse coordinates
+	switch (key) {
+	case 27: //Escape key
+		exit(0); //Exit the program
+	}
 
+	if (state.addModalOpenned) {
+		if (key >= '0' && key <= '9') {
+			addModal.inputText += key;
+		}
+	}
+	else if (state.deleteModalOpenned) {
+
+	}
+}
 void closeAllModals() {
 	addModal.close();
 }
@@ -307,4 +317,7 @@ void closeAllModals() {
 void Modal::close() {
 	state.addModalOpenned = false;
 	addModal.inputText = "";
+}
+void Modal::showInputText() {
+	drawText(x, y + 100, textColor,  inputText);
 }

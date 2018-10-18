@@ -1,8 +1,8 @@
 #pragma once
-void drawCircle(double x, double y, double r);
-void drawText(double x, double y, const char *string);
-void mouse(int button, int state, int x, int y);
-void closeAllModals();
+#include<string>
+using namespace std;
+
+
 struct Color{
 	double r, g, b;
 	Color();
@@ -14,3 +14,13 @@ struct State {
 	bool deleteModalOpenned = false;
 	bool addNodeTransition = false;
 };
+
+
+void drawCircle(double x, double y, double r);
+
+void drawText(double x, double y, Color cc, string str);
+
+void mouse(int button, int state, int x, int y);
+void closeAllModals();
+
+void handleKeypress(unsigned char key, int x, int y);

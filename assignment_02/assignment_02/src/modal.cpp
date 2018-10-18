@@ -24,6 +24,7 @@ void Modal::draw() {
 		glVertex2f(x + halfWidth, y - hafHeight);
 		glVertex2f(x - halfWidth, y - hafHeight);
 	glEnd();
+	showInputText();
 }
 
 void Modal::updateInputText(string inputText) {

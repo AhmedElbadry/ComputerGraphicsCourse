@@ -20,7 +20,7 @@ public:
 	void draw();
 	void updateInputText(string inputText);
 	void close();
-
+	void showInputText();
 private:
 
 };
