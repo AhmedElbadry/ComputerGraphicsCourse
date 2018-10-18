@@ -45,9 +45,7 @@ void BST::draw__private(Node* currNode) {
 
 	drawCircle(currNode->x, currNode->y, nodeRadius);
 
-
-
-
+	currNode->connectWithChildren();
 
 	draw__private(currNode->left);
 	draw__private(currNode->right);
@@ -86,13 +84,28 @@ void BST::updatePositions__private(Node* currNode, int level, int col) {
 
 	currNode->y = WINDOW_HEIGHT - (level*levelHeight - levelHeight / 2);
 
-
+	
 
 	cout << "\n\nnode date = " << absCol << "\n\n";
 
 	//mesure the positions
 	updatePositions__private(currNode->left, level + 1, col << 1);
 	updatePositions__private(currNode->right, level + 1, (col << 1)|1);
+}
+
+void Node::connectWithChildren() {
+	if (left) {
+		glBegin(GL_LINES);
+			glVertex2f(x, y);
+			glVertex2f(left->x, left->y);
+		glEnd();
+	}
+	if (right) {
+		glBegin(GL_LINES);
+		glVertex2f(x, y);
+		glVertex2f(right->x, right->y);
+		glEnd();
+	}
 }
 
 
@@ -149,6 +162,8 @@ void main(int argc, char** argv)
 	tree.insert(40);
 	tree.insert(25);
 	tree.insert(23);
+	tree.insert(22);
+	tree.insert(55);
 	tree.print();
 	//tree.update();
 	glutInit(&argc, argv);

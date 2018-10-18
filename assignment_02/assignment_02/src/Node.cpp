@@ -9,6 +9,3 @@ Node::Node(int x) {
 	right = NULL;
 }
 
-void Node::connectWithChildren() {
-
-}
