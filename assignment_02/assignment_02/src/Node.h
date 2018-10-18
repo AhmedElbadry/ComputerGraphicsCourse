@@ -19,4 +19,8 @@ struct Node {
 	Node(int);
 
 	void connectWithChildren();
+
+	void drawText();
+
+	void draw();
 };

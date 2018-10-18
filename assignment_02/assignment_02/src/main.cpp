@@ -45,12 +45,35 @@ void BST::draw__private(Node* currNode) {
 
 	drawCircle(currNode->x, currNode->y, nodeRadius);
 
-	currNode->connectWithChildren();
+	currNode->draw();
 
 	draw__private(currNode->left);
 	draw__private(currNode->right);
 }
 
+void Node::draw() {
+
+
+	connectWithChildren();
+	drawText();
+}
+void Node::drawText() {
+
+	char tmp[10];
+	int theData = data;
+
+	int index = 0;
+	while (theData) {
+		tmp[index] = '0' + theData % 10;
+		theData /= 10;
+		index++ ;
+	}
+	char str[10];
+	for (int i = 0; i < index; i++) 
+		str[i] = tmp[index - i - 1];
+	
+	::drawText(x, y, str);
+}
 void BST::update() {
 
 	levels = getLevel__private(root);
@@ -109,17 +132,26 @@ void Node::connectWithChildren() {
 }
 
 
-void displayText(double x, double y, const char *string) {
+void drawText(double x, double y, const char *string) {
+	glColor3f(0.0, 0.0, 0.0);
+	
+	cout << "text = " << string << endl;
 	int j = strlen(string);
 
-	glRasterPos2f(x, y);
+	double textWidth = 0;
+
+	for (int i = 0; i < j; i++) {
+		textWidth += glutBitmapWidth(GLUT_BITMAP_HELVETICA_18, string[i]);
+	}
+
+	glRasterPos2f(x - textWidth/2, y);
 	for (int i = 0; i < j; i++) {
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, string[i]);
-		//cout << glutBitmapWidth(GLUT_BITMAP_HELVETICA_18, string[i]) << endl;
+		
 	}
 }
 void drawCircle(double x, double y, double r) {
-
+	glColor3f(1.0, 0.0, 0.0);
 	int iterations = 360;
 	glBegin(GL_POLYGON);
 	for (int i = 0; i < iterations; i++) {
