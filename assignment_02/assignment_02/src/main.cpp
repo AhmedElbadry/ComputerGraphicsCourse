@@ -5,11 +5,13 @@
 #include "BST.h"
 #include "global.h"
 #include "button.h"
+#include "modal.h"
+#include<string>
 
 using namespace std;
 
-
 #define PI acos(-1)
+
 const double WINDOW_WIDTH = 1100.0;
 const double WINDOW_HEIGHT = 700.0;
 const double MAX_NODE_RADIUS = 100.0;
@@ -17,16 +19,23 @@ const double MIN_NODE_RADIOUS = 40;
 const double BUTTON_WIDTH = 50;
 const double BUTTON_HEIGHT = 50;
 const double BUTTON_TOP_MARGIN = 80.0;
-Color buttonColor(0.0, 1.0, 0.0);
+const double MODAL_WIDTH = 500;
+const double MODAL_HEIGHT = 300;
+const double CLOSE_BUTTON_MARGIN = 10;
+const double CLOSE_BUTTON_WIDTH = 40;
+const double CLOSE_BUTTON_HEIGHT = 40;
 
+
+string inputHolder;
+
+Color buttonColor(0.0, 1.0, 0.0);
+Color moadalColor(0.0, 1.0, 0.0);
+Color closeButtonColor(0.0, 0.0, 1.0);
 int levels;
 double levelHeight;
 double nodeRadius;
 
-
-
-
-
+State state;
 
 
 
@@ -34,9 +43,28 @@ Button addButton(
 	"ADD",
 	BUTTON_WIDTH/2,
 	WINDOW_HEIGHT - BUTTON_TOP_MARGIN,
-	BUTTON_WIDTH, BUTTON_HEIGHT,
+	BUTTON_WIDTH,
+	BUTTON_HEIGHT,
 	buttonColor
 );
+
+Modal addModal(
+	"ADD",
+	WINDOW_WIDTH/2,
+	WINDOW_HEIGHT/2,
+	MODAL_WIDTH,
+	MODAL_HEIGHT,
+	moadalColor,
+	Button(
+		"close",
+		WINDOW_WIDTH / 2 + MODAL_WIDTH/2 - CLOSE_BUTTON_MARGIN,
+		WINDOW_HEIGHT / 2 + MODAL_HEIGHT / 2 - CLOSE_BUTTON_MARGIN,
+		CLOSE_BUTTON_WIDTH,
+		CLOSE_BUTTON_HEIGHT,
+		closeButtonColor
+	)
+);
+
 BST tree;
 
 
@@ -188,6 +216,10 @@ void mainLoop() {
 	tree.draw();
 
 	addButton.draw();
+
+	if (state.addModalOpenned) {
+		addModal.draw();
+	}
 	glFlush();
 }
 
@@ -227,7 +259,7 @@ void main(int argc, char** argv)
 
 
 }
-void Button::checkForMouseClick(int mouseX, int mouseY) {
+bool Button::checkForMouseClick(int mouseX, int mouseY) {
 	cout << "//////////\n";
 	cout << "mouseX = " << mouseX << endl;
 	cout << "mouseY = " << mouseY << endl;
@@ -241,12 +273,15 @@ void Button::checkForMouseClick(int mouseX, int mouseY) {
 		&& mouseY <= y + height / 2
 		) {
 		buttonClicked();
+		return true;
 	}
+
+	return false;
 }
 
 void Button::buttonClicked() {
-	cout << "yaas" << endl;
-	opened = true;
+	if(name == "ADD")
+		state.addModalOpenned = true;
 }
 void mouse(int button, int state, int x, int y) {
 	y = WINDOW_HEIGHT - y;
@@ -254,3 +289,5 @@ void mouse(int button, int state, int x, int y) {
 		addButton.checkForMouseClick(x, y);
 	}
 }
+
+

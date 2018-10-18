@@ -15,10 +15,10 @@ public:
 	double height;
 
 
-
+	Button();
 	Button(string nn, double xx, double yy, double ww, double hh, Color c);
 	void draw();
 	void buttonClicked();
-	void checkForMouseClick(int mouseX, int mouseY);
+	bool checkForMouseClick(int mouseX, int mouseY);
 
 };

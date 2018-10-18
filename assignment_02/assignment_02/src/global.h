@@ -12,5 +12,4 @@ struct State {
 	bool addModalOpenned = false;
 	bool deleteModalOpenned = false;
 	bool addNodeTransition = false;
-
 };

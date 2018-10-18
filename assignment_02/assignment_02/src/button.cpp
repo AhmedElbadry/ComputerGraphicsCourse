@@ -16,7 +16,9 @@ Button::Button(string nn, double xx, double yy, double ww, double hh, Color c) {
 	color.b = c.b;
 	opened = false;
 }
+Button::Button() {
 
+}
 void Button::draw() {
 
 	glColor3f(color.r, color.g, color.b);
