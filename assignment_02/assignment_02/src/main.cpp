@@ -3,7 +3,8 @@
 #include<math.h>
 #include<algorithm>
 #include "BST.h"
-#include "funcDeclarations.h"
+#include "global.h"
+#include "button.h"
 using namespace std;
 
 
@@ -12,7 +13,9 @@ const double WINDOW_WIDTH = 1100.0;
 const double WINDOW_HEIGHT = 700.0;
 const double MAX_NODE_RADIUS = 100.0;
 const double MIN_NODE_RADIOUS = 40;
-
+const double BUTTON_WIDTH = 50;
+const double BUTTON_TOP_MARGIN = 80.0;
+Color buttonColor(0.0, 1.0, 0.0);
 
 int levels;
 double levelHeight;
@@ -21,12 +24,17 @@ double nodeRadius;
 
 
 
-double CR = 200.0f;
 
+
+
+
+Button addButton(BUTTON_WIDTH/2, WINDOW_HEIGHT - BUTTON_TOP_MARGIN, BUTTON_WIDTH, buttonColor);
 BST tree;
 
 
+void Button::buttonClicked() {
 
+}
 void initGL(void)
 {
 	glLoadIdentity();
@@ -52,8 +60,6 @@ void BST::draw__private(Node* currNode) {
 }
 
 void Node::draw() {
-
-
 	connectWithChildren();
 	drawText();
 }
@@ -173,8 +179,10 @@ void mainLoop() {
 	//drawCircle(200.0f, 200.0f, CR);
 	//char str[] = "AAHHNA";
 	//displayText(500.0f, 500.0f, str);
-
+	
 	tree.draw();
+
+	addButton.draw();
 	glFlush();
 }
 
@@ -197,6 +205,8 @@ void main(int argc, char** argv)
 	tree.insert(22);
 	tree.insert(55);
 	tree.print();
+
+	
 	//tree.update();
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB); 
@@ -208,6 +218,8 @@ void main(int argc, char** argv)
 	glutDisplayFunc(mainLoop);
 	glutIdleFunc(mainLoop);
 	glutMainLoop();
+
+	
 
 
 	

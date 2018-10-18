@@ -24,6 +24,12 @@
     <ClCompile Include="src\Node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\button.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\global.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BST.h">
@@ -32,7 +38,10 @@
     <ClInclude Include="src\Node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\funcDeclarations.h">
+    <ClInclude Include="src\button.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\global.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

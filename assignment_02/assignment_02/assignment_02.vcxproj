@@ -131,12 +131,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\BST.cpp" />
+    <ClCompile Include="src\button.cpp" />
+    <ClCompile Include="src\global.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Node.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BST.h" />
-    <ClInclude Include="src\funcDeclarations.h" />
+    <ClInclude Include="src\button.h" />
+    <ClInclude Include="src\global.h" />
     <ClInclude Include="src\Node.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
