@@ -3,18 +3,25 @@
 #include<math.h>
 #include<algorithm>
 #include "BST.h"
-
+#include "funcDeclarations.h"
 using namespace std;
 
 
 #define PI acos(-1)
-const float WINDOW_WIDTH = 1100.0;
-const float WINDOW_HEIGHT = 700.0;
+const double WINDOW_WIDTH = 1100.0;
+const double WINDOW_HEIGHT = 700.0;
+const double MAX_NODE_RADIUS = 100.0;
+const double MIN_NODE_RADIOUS = 40;
+
+
+int levels;
+double levelHeight;
+double nodeRadius;
 
 
 
 
-float CR = 200.0f;
+double CR = 200.0f;
 
 BST tree;
 
@@ -29,17 +36,33 @@ void initGL(void)
 
 }
 
-/*
-void BST::BST__draw() {
 
-}*/
+void BST::draw() {
+	draw__private(root);
+}
+void BST::draw__private(Node* currNode) {
+	if (!currNode) return;
+
+	drawCircle(currNode->x, currNode->y, nodeRadius);
+
+
+
+
+
+	draw__private(currNode->left);
+	draw__private(currNode->right);
+}
 
 void BST::update() {
 
 	levels = getLevel__private(root);
 	levelHeight = WINDOW_HEIGHT / levels;
-	updatePositions__private(root, 1, 0);
+	updatePositions__private(root, 1, 1);
 
+	nodeRadius = min(
+		min(((WINDOW_WIDTH / pow(2, levels)*1.0) / 2)*0.8, ((WINDOW_HEIGHT / levels) / 2)*0.8)
+		, MAX_NODE_RADIUS);
+	nodeRadius = max(nodeRadius, MIN_NODE_RADIOUS);
 }
 
 int BST::getLevel__private(Node* currNode) {
@@ -54,23 +77,26 @@ void BST::updatePositions__private(Node* currNode, int level, int col) {
 	currNode->level = level;
 	currNode->col = col;
 
-	currNode->x = WINDOW_WIDTH / 2 + (WINDOW_WIDTH / (pow(2, level)))*col;
-	//+ ((int)(col != 0))*((col > 0) ? -1 : 1)*(WINDOW_WIDTH / (2 * level))/2;
+	int absCol = col - pow(2, level - 1) + 1;
+
+	double ww = (WINDOW_WIDTH / pow(2, level - 1));
+
+	currNode->x = ww * (absCol - 1) + ww / 2;
 
 
 	currNode->y = WINDOW_HEIGHT - (level*levelHeight - levelHeight / 2);
 
 
 
-	cout << "\n\nnode date = " << ((int)(col != 0)) << "\n\n";
+	cout << "\n\nnode date = " << absCol << "\n\n";
 
 	//mesure the positions
-	updatePositions__private(currNode->left, level + 1, col - 1);
-	updatePositions__private(currNode->right, level + 1, col + 1);
+	updatePositions__private(currNode->left, level + 1, col << 1);
+	updatePositions__private(currNode->right, level + 1, (col << 1)|1);
 }
 
 
-void displayText(float x, float y, const char *string) {
+void displayText(double x, double y, const char *string) {
 	int j = strlen(string);
 
 	glRasterPos2f(x, y);
@@ -79,13 +105,13 @@ void displayText(float x, float y, const char *string) {
 		//cout << glutBitmapWidth(GLUT_BITMAP_HELVETICA_18, string[i]) << endl;
 	}
 }
-void drawCircle(float x, float y, float r) {
+void drawCircle(double x, double y, double r) {
 
 	int iterations = 360;
 	glBegin(GL_POLYGON);
 	for (int i = 0; i < iterations; i++) {
-		float currX = r * cos(2 * PI*(i / (iterations * 1.0)));
-		float currY = r * sin(2 * PI*(i / (iterations * 1.0)));
+		double currX = r * cos(2 * PI*(i / (iterations * 1.0)));
+		double currY = r * sin(2 * PI*(i / (iterations * 1.0)));
 		glVertex2f(x + currX, y + currY);
 	}
 	glEnd();
@@ -99,9 +125,11 @@ void mainLoop() {
 	glClear(GL_COLOR_BUFFER_BIT);
 	glBegin(GL_POLYGON);
 	glColor3f(1.0, 0.0, 0.0);
-	drawCircle(200.0f, 200.0f, CR);
-	char str[] = "AAHHNA";
-	displayText(500.0f, 500.0f, str);
+	//drawCircle(200.0f, 200.0f, CR);
+	//char str[] = "AAHHNA";
+	//displayText(500.0f, 500.0f, str);
+
+	tree.draw();
 	glFlush();
 }
 
@@ -115,12 +143,12 @@ void main(int argc, char** argv)
 
 	tree.insert(20);
 	tree.insert(10);
-	//tree.insert(15);
-	//tree.insert(7);
+	tree.insert(15);
+	tree.insert(7);
 	tree.insert(30);
-	//tree.insert(40);
-	//tree.insert(25);
-	//tree.insert(23);
+	tree.insert(40);
+	tree.insert(25);
+	tree.insert(23);
 	tree.print();
 	//tree.update();
 	glutInit(&argc, argv);

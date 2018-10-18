@@ -7,10 +7,10 @@ struct Node {
 	int level;
 	int col;
 	
-	float x;
-	float y;
-	float currX;
-	float currY;
+	double x;
+	double y;
+	double currX;
+	double currY;
 	
 
 	bool isInPosition;
