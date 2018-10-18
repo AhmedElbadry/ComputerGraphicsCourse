@@ -5,6 +5,7 @@
 #include "BST.h"
 #include "global.h"
 #include "button.h"
+
 using namespace std;
 
 
@@ -14,6 +15,7 @@ const double WINDOW_HEIGHT = 700.0;
 const double MAX_NODE_RADIUS = 100.0;
 const double MIN_NODE_RADIOUS = 40;
 const double BUTTON_WIDTH = 50;
+const double BUTTON_HEIGHT = 50;
 const double BUTTON_TOP_MARGIN = 80.0;
 Color buttonColor(0.0, 1.0, 0.0);
 
@@ -28,13 +30,17 @@ double nodeRadius;
 
 
 
-Button addButton(BUTTON_WIDTH/2, WINDOW_HEIGHT - BUTTON_TOP_MARGIN, BUTTON_WIDTH, buttonColor);
+Button addButton(
+	"ADD",
+	BUTTON_WIDTH/2,
+	WINDOW_HEIGHT - BUTTON_TOP_MARGIN,
+	BUTTON_WIDTH, BUTTON_HEIGHT,
+	buttonColor
+);
 BST tree;
 
 
-void Button::buttonClicked() {
 
-}
 void initGL(void)
 {
 	glLoadIdentity();
@@ -115,7 +121,7 @@ void BST::updatePositions__private(Node* currNode, int level, int col) {
 
 	
 
-	cout << "\n\nnode date = " << absCol << "\n\n";
+	//cout << "\n\nnode date = " << absCol << "\n\n";
 
 	//mesure the positions
 	updatePositions__private(currNode->left, level + 1, col << 1);
@@ -141,7 +147,6 @@ void Node::connectWithChildren() {
 void drawText(double x, double y, const char *string) {
 	glColor3f(0.0, 0.0, 0.0);
 	
-	cout << "text = " << string << endl;
 	int j = strlen(string);
 
 	double textWidth = 0;
@@ -215,13 +220,37 @@ void main(int argc, char** argv)
 	glutCreateWindow("Binary Search Tree Visualization");
 	initGL();
 	glutReshapeFunc(handleResize);
+	glutMouseFunc(mouse);
 	glutDisplayFunc(mainLoop);
 	glutIdleFunc(mainLoop);
 	glutMainLoop();
 
-	
 
+}
+void Button::checkForMouseClick(int mouseX, int mouseY) {
+	cout << "//////////\n";
+	cout << "mouseX = " << mouseX << endl;
+	cout << "mouseY = " << mouseY << endl;
+	cout << "x = " << x << endl;
+	cout << "y = " << y << endl;
+	cout << "width = " << width << endl;
+	cout << "height = " << height << endl;
+	if (mouseX >= x - width / 2
+		&& mouseX <= x + width / 2
+		&& mouseY >= y - height / 2
+		&& mouseY <= y + height / 2
+		) {
+		buttonClicked();
+	}
+}
 
-	
-
+void Button::buttonClicked() {
+	cout << "yaas" << endl;
+	opened = true;
+}
+void mouse(int button, int state, int x, int y) {
+	y = WINDOW_HEIGHT - y;
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
+		addButton.checkForMouseClick(x, y);
+	}
 }
