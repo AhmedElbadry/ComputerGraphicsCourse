@@ -11,10 +11,10 @@
 using namespace std;
 
 #define PI acos(-1)
-
+const double EP = 0.1;
 const double WINDOW_WIDTH = 1100.0;
 const double WINDOW_HEIGHT = 700.0;
-const double MAX_NODE_RADIUS = 100.0;
+const double MAX_NODE_RADIUS = 80.0;
 const double MIN_NODE_RADIOUS = 40;
 const double BUTTON_WIDTH = 50;
 const double BUTTON_HEIGHT = 50;
@@ -28,7 +28,7 @@ const double MODAL_SUBMIT_BUTTON_WIDTH = 120;
 const double MODAL_SUBMIT_BUTTON_HEIGHT = 50;
 double modalX = WINDOW_WIDTH / 2;
 double modalY = WINDOW_HEIGHT / 2;
-double nodeSpeed = 0.8;
+double nodeSpeed = .8;
 
 
 string inputHolder;
@@ -50,6 +50,8 @@ Color textColor(1.0, 1.0, 1.0);
 int levels;
 double levelHeight;
 double nodeRadius;
+double nodeCurrentRadius = 40;
+double nodeRadiusStep = .2;
 
 State state;
 
@@ -164,12 +166,8 @@ void Node::draw() {
 	
 	drawCircle(0, 0, 1);
 	connectWithChildren();
-	drawCircle(currX, currY, nodeRadius);
+	drawCircle(currX, currY, nodeCurrentRadius);
 	drawText();
-	
-	
-
-	
 }
 
 void Node::drawText() {
@@ -186,7 +184,7 @@ bool Node::goToPos() {
 	double dx = (x - currX);
 	double slope = dy / dx;
 
-	if (abs(dy) > nodeSpeed && abs(dx) > nodeSpeed) {
+	if (abs(dy) > nodeSpeed || abs(dx) > nodeSpeed) {
 		if (abs(dy) > abs(dx)) {
 
 			if (y > currY)
@@ -194,7 +192,21 @@ bool Node::goToPos() {
 			else
 				currY -= nodeSpeed;
 
-			currX = (currY + slope * x1 - y1) / slope;
+			if (slope == 0) {
+				currX += nodeSpeed;
+			}
+			else
+				currX = (currY + slope * x1 - y1) / slope;
+
+			if (abs(slope) < EP) {
+				if (x > currX)
+					currX += nodeSpeed;
+				else
+					currX -= nodeSpeed;
+			}
+			else {
+				currX = (currY + slope * x1 - y1) / slope;
+			}
 
 		}
 		else {
@@ -203,14 +215,26 @@ bool Node::goToPos() {
 			else
 				currX -= nodeSpeed;
 
-			currY = (slope* currX - slope * x1 + y1);
+			if (abs(slope) < EP) {
+				if(y > currY)
+					currY += nodeSpeed;
+				else
+					currY -= nodeSpeed;
+			}
+			else {
+				currY = (slope* currX - slope * x1 + y1);
+			}
+				
+			
 		}
-
 		return false;
 	}
 	else {
-		currX = x;
-		currY = y;
+
+		//currX = x;
+		//currY = y;
+
+		
 
 		return true;
 	}
@@ -241,7 +265,9 @@ void BST::updatePositions__private(Node* currNode, int level, int col) {
 
 	currNode->level = level;
 	currNode->col = col;
+	
 	cout << "update\n";
+	cout << "node date = " << currNode->data << endl;
 	cout << "currNode->x" << currNode->x << endl;
 	cout << "currNode->y" << currNode->y << endl;
 	cout << "currNode->currX" << currNode->currX << endl;
@@ -255,6 +281,7 @@ void BST::updatePositions__private(Node* currNode, int level, int col) {
 
 
 	currNode->y = WINDOW_HEIGHT - (level*levelHeight - levelHeight / 2);
+	
 	cout << "after\n";
 	cout << "currNode->x" << currNode->x << endl;
 	cout << "currNode->y" << currNode->y << endl;
@@ -280,9 +307,7 @@ void Node::connectWithChildren() {
 			glVertex2f(currX, currY);
 			glVertex2f(left->currX, left->currY);
 			glEnd();
-			cout << data << " should connect with " << left->data << endl;
-			cout << "currX " << left->currX << endl;
-			cout << "currY " << left->currY << endl;
+
 		}
 		
 	}
@@ -294,7 +319,6 @@ void Node::connectWithChildren() {
 			glEnd();
 		}
 
-		cout << data << " should connect with " << right->data << endl;
 	}
 	
 }
@@ -345,13 +369,9 @@ void mainLoop() {
 
 	glClear(GL_COLOR_BUFFER_BIT);
 	glBegin(GL_POLYGON);
-	glColor3f(1.0, 0.0, 0.0);
-	//drawCircle(200.0f, 200.0f, CR);
-	//char str[] = "AAHHNA";
-	//displayText(500.0f, 500.0f, str);
+
 	
 	tree.draw();
-
 	addButton.draw();
 	deleteButton.draw();
 
@@ -365,6 +385,14 @@ void mainLoop() {
 		closeButton.draw();
 		deleteModal__submitButton.draw();
 	}
+
+	if (abs(nodeRadius - nodeCurrentRadius) > nodeRadiusStep) {
+		if (nodeRadius > nodeCurrentRadius)
+			nodeCurrentRadius += nodeRadiusStep;
+		else
+			nodeCurrentRadius -= nodeRadiusStep;
+	}
+
 	glFlush();
 }
 
@@ -375,6 +403,7 @@ void handleResize(int width, int height) {
 
 void main(int argc, char** argv)
 {
+
 	/*
 	addModal.inputText = "11";
 	tree.insert(20);
@@ -446,12 +475,18 @@ void Button::buttonClicked() {
 		closeAllModals();
 	
 	else if (name == "ADD NODE") {
-		tree.insert(stoi(addModal.inputText));
-		closeAllModals();
+		if (addModal.inputText != "") {
+			tree.insert(stoi(addModal.inputText));
+			closeAllModals();
+		}
+			
 	}
 	else if (name == "DELETE NODE") {
-		tree.deleteNode(stoi(deleteModal.inputText));
-		closeAllModals();
+		if (deleteModal.inputText != "") {
+			tree.deleteNode(stoi(deleteModal.inputText));
+			closeAllModals();
+		}
+			
 	}
 
 

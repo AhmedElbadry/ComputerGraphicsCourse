@@ -11,6 +11,7 @@ Modal::Modal(string nn, double xx, double yy, double ww, double hh, Color cc) {
 	width = ww;
 	height = hh;
 	color = cc;
+	inputText = "";
 }
 
 void Modal::draw() {
