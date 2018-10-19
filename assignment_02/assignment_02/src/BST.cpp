@@ -128,7 +128,12 @@ void BST::deleteNode(int x) {
 			//if (currNode == root)
 				//root = maxLeft;
 
-			r->left = maxLeft;
+			if (x < r->data) {
+				r->left = maxLeft;
+			}
+			else {
+				r->right = maxLeft;
+			}
 
 			if (currNode == root)
 				root = maxLeft;
@@ -151,6 +156,7 @@ void BST::deleteNode(int x) {
 			}
 			if (currNode == root)
 				root = maxLeft;
+
 			delete currNode;
 		}
 		
