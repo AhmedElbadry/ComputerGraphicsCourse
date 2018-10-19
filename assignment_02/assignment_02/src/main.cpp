@@ -163,7 +163,7 @@ void Node::draw() {
 void Node::drawText() {
 
 	string str = to_string(data);
-	::drawText(currX, currY, textColor,str);
+	::drawText(currX, currY, textColor, str, GLUT_BITMAP_HELVETICA_18);
 }
 
 bool Node::goToPos() {
@@ -281,7 +281,7 @@ void Node::connectWithChildren() {
 }
 
 
-void drawText(double x, double y, Color cc, string str) {
+void drawText(double x, double y, Color cc, string str, void *font) {
 	glColor3f(cc.r, cc.g, cc.b);
 	
 	int j = str.length();
@@ -289,12 +289,12 @@ void drawText(double x, double y, Color cc, string str) {
 	double textWidth = 0;
 
 	for (int i = 0; i < j; i++) {
-		textWidth += glutBitmapWidth(GLUT_BITMAP_HELVETICA_18, str[i]);
+		textWidth += glutBitmapWidth(font, str[i]);
 	}
 
-	glRasterPos2f(x - textWidth/2, y);
+	glRasterPos2f(x - textWidth/2, y - 4);
 	for (int i = 0; i < j; i++) {
-		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, str[i]);
+		glutBitmapCharacter(font, str[i]);
 		
 	}
 }
@@ -478,5 +478,5 @@ void Modal::close() {
 	closeButton.isVisible = false;
 }
 void Modal::showInputText() {
-	drawText(x, y + 100, textColor,  inputText);
+	drawText(x, y + 100, textColor,  inputText, GLUT_BITMAP_HELVETICA_18);
 }

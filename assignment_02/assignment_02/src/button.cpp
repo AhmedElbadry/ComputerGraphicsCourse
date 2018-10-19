@@ -75,7 +75,7 @@ void Button::draw() {
 		glEnd();
 	}
 	else {
-		drawText(x, y, textColor, name);
+		drawText(x, y, textColor, name, GLUT_BITMAP_HELVETICA_12);
 	}
 	
 

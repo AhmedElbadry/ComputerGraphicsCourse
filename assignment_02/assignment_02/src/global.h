@@ -18,7 +18,7 @@ struct State {
 
 void drawCircle(double x, double y, double r);
 
-void drawText(double x, double y, Color cc, string str);
+void drawText(double x, double y, Color cc, string str, void *font);
 
 void mouse(int button, int state, int x, int y);
 void closeAllModals();
