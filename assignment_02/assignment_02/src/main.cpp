@@ -28,6 +28,7 @@ const double MODAL_SUBMIT_BUTTON_WIDTH = 80;
 const double MODAL_SUBMIT_BUTTON_HEIGHT = 40;
 double modalX = WINDOW_WIDTH / 2;
 double modalY = WINDOW_HEIGHT / 2;
+double nodeSpeed = 0.5;
 
 
 string inputHolder;
@@ -132,7 +133,6 @@ void BST::draw() {
 void BST::draw__private(Node* currNode) {
 	if (!currNode) return;
 
-	drawCircle(currNode->x, currNode->y, nodeRadius);
 
 	currNode->draw();
 
@@ -141,6 +141,10 @@ void BST::draw__private(Node* currNode) {
 }
 
 void Node::draw() {
+	
+	isInPosition = goToPos();
+	
+
 	connectWithChildren();
 	drawText();
 }
@@ -148,10 +152,48 @@ void Node::draw() {
 void Node::drawText() {
 
 	string str = to_string(data);
-	::drawText(x, y, textColor,str);
+	::drawText(currX, currY, textColor,str);
 }
 
+bool Node::goToPos() {
+	drawCircle(currX, currY, nodeRadius);
 
+	double y1 = currY;
+	double x1 = currX;
+	double dy = (y - currY);
+	double dx = (x - currX);
+	double slope = dy / dx;
+
+	if (abs(dy) > nodeSpeed && abs(dx) > nodeSpeed) {
+		if (abs(dy) > abs(dx)) {
+
+			if (y > currY)
+				currY += nodeSpeed;
+			else
+				currY -= nodeSpeed;
+
+			currX = (currY + slope * x1 - y1) / slope;
+
+		}
+		else {
+			if (x > currX)
+				currX += nodeSpeed;
+			else
+				currX -= nodeSpeed;
+
+			currY = (slope* currX - slope * x1 + y1);
+		}
+
+		return false;
+	}
+	else {
+		currX = x;
+		currY = y;
+
+		return true;
+	}
+		
+}
 
 
 void BST::update() {
@@ -177,6 +219,11 @@ void BST::updatePositions__private(Node* currNode, int level, int col) {
 
 	currNode->level = level;
 	currNode->col = col;
+	cout << "update\n";
+	cout << "currNode->x" << currNode->x << endl;
+	cout << "currNode->y" << currNode->y << endl;
+	cout << "currNode->currX" << currNode->currX << endl;
+	cout << "currNode->currY" << currNode->currY << endl;
 
 	int absCol = col - pow(2, level - 1) + 1;
 
@@ -186,7 +233,13 @@ void BST::updatePositions__private(Node* currNode, int level, int col) {
 
 
 	currNode->y = WINDOW_HEIGHT - (level*levelHeight - levelHeight / 2);
+	cout << "after\n";
+	cout << "currNode->x" << currNode->x << endl;
+	cout << "currNode->y" << currNode->y << endl;
+	cout << "currNode->currX" << currNode->currX << endl;
+	cout << "currNode->currY" << currNode->currY << endl;
 
+	cout << "\n";
 	
 
 	//cout << "\n\nnode date = " << absCol << "\n\n";
@@ -198,16 +251,21 @@ void BST::updatePositions__private(Node* currNode, int level, int col) {
 
 void Node::connectWithChildren() {
 	if (left) {
-		glBegin(GL_LINES);
+		if (left->isInPosition) {
+			glBegin(GL_LINES);
 			glVertex2f(x, y);
 			glVertex2f(left->x, left->y);
-		glEnd();
+			glEnd();
+		}
+		
 	}
 	if (right) {
-		glBegin(GL_LINES);
-		glVertex2f(x, y);
-		glVertex2f(right->x, right->y);
-		glEnd();
+		if (right->isInPosition) {
+			glBegin(GL_LINES);
+			glVertex2f(x, y);
+			glVertex2f(right->x, right->y);
+			glEnd();
+		}
 	}
 }
 
@@ -310,13 +368,14 @@ void main(int argc, char** argv)
 
 }
 bool Button::checkForMouseClick(int mouseX, int mouseY) {
+	/*
 	cout << "//////////\n";
 	cout << "mouseX = " << mouseX << endl;
 	cout << "mouseY = " << mouseY << endl;
 	cout << "x = " << x << endl;
 	cout << "y = " << y << endl;
 	cout << "width = " << width << endl;
-	cout << "height = " << height << endl;
+	cout << "height = " << height << endl;*/
 	if (isVisible
 		&& mouseX >= x - width / 2
 		&& mouseX <= x + width / 2

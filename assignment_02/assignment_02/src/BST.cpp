@@ -91,7 +91,7 @@ Node* BST::findMax__private(Node* node) {
 }
 
 void BST::deleteNode(int x) {
-	/*
+	
 	Node* currNode = root;
 	Node* r = root;
 
@@ -179,9 +179,9 @@ void BST::deleteNode(int x) {
 
 		delete currNode;
 	}
-	*/
+	
 
-	root = deleteNode__private(root, x);
+	//root = deleteNode__private(root, x);
 	update();
 }
 

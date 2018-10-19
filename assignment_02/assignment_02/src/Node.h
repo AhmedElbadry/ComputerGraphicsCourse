@@ -6,14 +6,18 @@ struct Node {
 	Node* right;
 	int level;
 	int col;
-	
-	double x;
-	double y;
-	double currX;
-	double currY;
+
 	
 
-	bool isInPosition;
+	double x;
+	double y;
+
+
+	double currX = 0;
+	double currY = 0;
+	
+
+	bool isInPosition = false;
 
 	Node();
 	Node(int);
@@ -23,4 +27,6 @@ struct Node {
 	void drawText();
 
 	void draw();
+
+	bool goToPos();
 };
