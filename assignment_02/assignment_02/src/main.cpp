@@ -24,7 +24,8 @@ const double MODAL_HEIGHT = 300;
 const double CLOSE_BUTTON_MARGIN = 10;
 const double CLOSE_BUTTON_WIDTH = 40;
 const double CLOSE_BUTTON_HEIGHT = 40;
-
+const double MODAL_SUBMIT_BUTTON_WIDTH = 80;
+const double MODAL_SUBMIT_BUTTON_HEIGHT = 40;
 double modalX = WINDOW_WIDTH / 2;
 double modalY = WINDOW_HEIGHT / 2;
 
@@ -32,6 +33,7 @@ double modalY = WINDOW_HEIGHT / 2;
 string inputHolder;
 Color buttonColor(0.0, 1.0, 0.0);
 Color moadalColor(0.0, 1.0, 0.0);
+Color modalSubmitButtonColor(1.0, 1.0, 0.0);
 Color closeButtonColor(0.0, 0.0, 1.0);
 Color textColor(1.0, 1.0, 1.0);
 int levels;
@@ -68,7 +70,14 @@ Modal addModal(
 	MODAL_HEIGHT,
 	moadalColor
 );
-
+Button addModal__submitButton(
+	"ADD NODE",
+	modalX,
+	modalY - 20,
+	MODAL_SUBMIT_BUTTON_WIDTH,
+	MODAL_SUBMIT_BUTTON_HEIGHT,
+	modalSubmitButtonColor
+);
 
 
 BST tree;
@@ -219,6 +228,7 @@ void mainLoop() {
 	if (state.addModalOpenned) {
 		addModal.draw();
 		closeButton.draw();
+		addModal__submitButton.draw();
 	}
 	glFlush();
 }
@@ -230,6 +240,7 @@ void handleResize(int width, int height) {
 
 void main(int argc, char** argv)
 {
+	/*
 	addModal.inputText = "11";
 	tree.insert(20);
 	tree.insert(10);
@@ -241,7 +252,7 @@ void main(int argc, char** argv)
 	tree.insert(23);
 	tree.insert(22);
 	tree.insert(55);
-	tree.print();
+	tree.print();*/
 
 	
 	//tree.update();
@@ -284,14 +295,20 @@ void Button::buttonClicked() {
 	cout << "button clicked = " << name << endl;
 	if(name == "ADD")
 		state.addModalOpenned = true;
-	if (name == "CLOSE")
+	else if (name == "CLOSE")
 		closeAllModals();
+	
+	else if (name == "ADD NODE") {
+		tree.insert(stoi(addModal.inputText));
+		closeAllModals();
+	}
 }
 void mouse(int button, int state, int x, int y) {
 	y = WINDOW_HEIGHT - y;
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
 		addButton.checkForMouseClick(x, y);
 		closeButton.checkForMouseClick(x, y);
+		addModal__submitButton.checkForMouseClick(x, y);
 	}
 }
 void handleKeypress(unsigned char key, //The key that was pressed
@@ -304,6 +321,9 @@ void handleKeypress(unsigned char key, //The key that was pressed
 	if (state.addModalOpenned) {
 		if (key >= '0' && key <= '9') {
 			addModal.inputText += key;
+		}
+		if (key == 8) {
+			addModal.inputText = (addModal.inputText).substr(0, (addModal.inputText).size() - 1);
 		}
 	}
 	else if (state.deleteModalOpenned) {
