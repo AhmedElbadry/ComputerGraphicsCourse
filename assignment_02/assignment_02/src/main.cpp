@@ -50,7 +50,17 @@ Button addButton(
 	WINDOW_HEIGHT - BUTTON_TOP_MARGIN,
 	BUTTON_WIDTH,
 	BUTTON_HEIGHT,
-	buttonColor
+	buttonColor,
+	true
+);
+Button deleteButton(
+	"DELETE",
+	BUTTON_WIDTH / 2,
+	WINDOW_HEIGHT - BUTTON_TOP_MARGIN - BUTTON_HEIGHT - 10,
+	BUTTON_WIDTH,
+	BUTTON_HEIGHT,
+	buttonColor,
+	true
 );
 
 Button closeButton(
@@ -59,8 +69,11 @@ Button closeButton(
 	modalY + MODAL_HEIGHT / 2 - CLOSE_BUTTON_HEIGHT / 2 - CLOSE_BUTTON_MARGIN,
 	CLOSE_BUTTON_WIDTH,
 	CLOSE_BUTTON_HEIGHT,
-	closeButtonColor
+	closeButtonColor,
+	false
 );
+
+
 
 Modal addModal(
 	"ADD",
@@ -76,7 +89,26 @@ Button addModal__submitButton(
 	modalY - 20,
 	MODAL_SUBMIT_BUTTON_WIDTH,
 	MODAL_SUBMIT_BUTTON_HEIGHT,
-	modalSubmitButtonColor
+	modalSubmitButtonColor,
+	false
+);
+
+Modal deleteModal(
+	"DELETE",
+	modalX,
+	modalY,
+	MODAL_WIDTH,
+	MODAL_HEIGHT,
+	moadalColor
+);
+Button deleteModal__submitButton(
+	"DELETE NODE",
+	modalX,
+	modalY - 20,
+	MODAL_SUBMIT_BUTTON_WIDTH,
+	MODAL_SUBMIT_BUTTON_HEIGHT,
+	modalSubmitButtonColor,
+	false
 );
 
 
@@ -224,11 +256,17 @@ void mainLoop() {
 	tree.draw();
 
 	addButton.draw();
+	deleteButton.draw();
 
 	if (state.addModalOpenned) {
 		addModal.draw();
 		closeButton.draw();
 		addModal__submitButton.draw();
+	}
+	else if (state.deleteModalOpenned) {
+		deleteModal.draw();
+		closeButton.draw();
+		deleteModal__submitButton.draw();
 	}
 	glFlush();
 }
@@ -279,7 +317,8 @@ bool Button::checkForMouseClick(int mouseX, int mouseY) {
 	cout << "y = " << y << endl;
 	cout << "width = " << width << endl;
 	cout << "height = " << height << endl;
-	if (mouseX >= x - width / 2
+	if (isVisible
+		&& mouseX >= x - width / 2
 		&& mouseX <= x + width / 2
 		&& mouseY >= y - height / 2
 		&& mouseY <= y + height / 2
@@ -293,8 +332,18 @@ bool Button::checkForMouseClick(int mouseX, int mouseY) {
 
 void Button::buttonClicked() {
 	cout << "button clicked = " << name << endl;
-	if(name == "ADD")
+	if (name == "ADD") {
 		state.addModalOpenned = true;
+		addModal__submitButton.isVisible = true;
+		closeButton.isVisible = true;
+	}
+		
+
+	else if (name == "DELETE") {
+		state.deleteModalOpenned = true;
+		deleteModal__submitButton.isVisible = true;
+		closeButton.isVisible = true;
+	}
 	else if (name == "CLOSE")
 		closeAllModals();
 	
@@ -302,6 +351,12 @@ void Button::buttonClicked() {
 		tree.insert(stoi(addModal.inputText));
 		closeAllModals();
 	}
+	else if (name == "DELETE NODE") {
+		tree.deleteNode(stoi(deleteModal.inputText));
+		closeAllModals();
+	}
+
+
 }
 void mouse(int button, int state, int x, int y) {
 	y = WINDOW_HEIGHT - y;
@@ -309,6 +364,8 @@ void mouse(int button, int state, int x, int y) {
 		addButton.checkForMouseClick(x, y);
 		closeButton.checkForMouseClick(x, y);
 		addModal__submitButton.checkForMouseClick(x, y);
+		deleteButton.checkForMouseClick(x, y);
+		deleteModal__submitButton.checkForMouseClick(x, y);
 	}
 }
 void handleKeypress(unsigned char key, //The key that was pressed
@@ -327,7 +384,12 @@ void handleKeypress(unsigned char key, //The key that was pressed
 		}
 	}
 	else if (state.deleteModalOpenned) {
-
+		if (key >= '0' && key <= '9') {
+			deleteModal.inputText += key;
+		}
+		if (key == 8) {
+			deleteModal.inputText = (addModal.inputText).substr(0, (addModal.inputText).size() - 1);
+		}
 	}
 }
 void closeAllModals() {
@@ -336,7 +398,14 @@ void closeAllModals() {
 
 void Modal::close() {
 	state.addModalOpenned = false;
+	addModal__submitButton.isVisible = false;
 	addModal.inputText = "";
+
+	state.deleteModalOpenned = false;
+	deleteModal__submitButton.isVisible = false;
+	deleteModal.inputText = "";
+
+	closeButton.isVisible = false;
 }
 void Modal::showInputText() {
 	drawText(x, y + 100, textColor,  inputText);

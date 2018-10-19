@@ -5,7 +5,7 @@
 #include<algorithm>
 #include"global.h"
 #include<string>
-Button::Button(string nn, double xx, double yy, double ww, double hh, Color c) {
+Button::Button(string nn, double xx, double yy, double ww, double hh, Color c, bool isV) {
 	name = nn;
 	x = xx;
 	y = yy;
@@ -15,6 +15,7 @@ Button::Button(string nn, double xx, double yy, double ww, double hh, Color c) {
 	color.g = c.g;
 	color.b = c.b;
 	opened = false;
+	isVisible = isV;
 }
 Button::Button() {
 
@@ -31,6 +32,8 @@ void Button::draw() {
 		glVertex2f(x + halfWidth, y - hafHeight);
 		glVertex2f(x - halfWidth, y - hafHeight);
 	glEnd();
+
+	drawText(x, y, txtColor, name);
 
 
 }
