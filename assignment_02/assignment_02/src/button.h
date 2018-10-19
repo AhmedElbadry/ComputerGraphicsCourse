@@ -13,11 +13,11 @@ public:
 	Color color;
 	double width;
 	double height;
-	Color txtColor = Color(1.0, 1.0, 0.0);
+	Color textColor;
 	bool isVisible = false;
-
+	double iconLineWidth = 4;
 	Button();
-	Button(string nn, double xx, double yy, double ww, double hh, Color c, bool isV);
+	Button(string nn, double xx, double yy, double ww, double hh, Color c, Color tt, bool isV);
 	void draw();
 	void buttonClicked();
 	bool checkForMouseClick(int mouseX, int mouseY);

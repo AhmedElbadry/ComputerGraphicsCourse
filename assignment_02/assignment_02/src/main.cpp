@@ -32,11 +32,17 @@ double nodeSpeed = 0.5;
 
 
 string inputHolder;
-Color buttonColor(0.0, 1.0, 0.0);
-Color moadalColor(0.0, 1.0, 0.0);
-Color modalSubmitButtonColor(1.0, 1.0, 0.0);
-Color closeButtonColor(0.0, 0.0, 1.0);
+Color mainBgColor(165 / 255.0, 145 / 255.0, 190 / 255.0);
+Color buttonColor(0.0, 0.0, 0.0);
+Color buttonTextColor(1.0, 1.0, 1.0);
+Color moadalColor(224 / 255.0, 224 / 255.0, 113 / 255.0);
+Color modalSubmitButtonColor(0.0, 0.0, 0.0);
+Color modalSubmitButtonTextColor(1.0, 1.0, 1.0);
+
+Color closeButtonColor(0.0, 0.0, 0.0);
+
 Color textColor(1.0, 1.0, 1.0);
+
 int levels;
 double levelHeight;
 double nodeRadius;
@@ -52,6 +58,7 @@ Button addButton(
 	BUTTON_WIDTH,
 	BUTTON_HEIGHT,
 	buttonColor,
+	buttonTextColor,
 	true
 );
 Button deleteButton(
@@ -61,6 +68,7 @@ Button deleteButton(
 	BUTTON_WIDTH,
 	BUTTON_HEIGHT,
 	buttonColor,
+	buttonTextColor,
 	true
 );
 
@@ -71,6 +79,7 @@ Button closeButton(
 	CLOSE_BUTTON_WIDTH,
 	CLOSE_BUTTON_HEIGHT,
 	closeButtonColor,
+	buttonTextColor,
 	false
 );
 
@@ -91,6 +100,7 @@ Button addModal__submitButton(
 	MODAL_SUBMIT_BUTTON_WIDTH,
 	MODAL_SUBMIT_BUTTON_HEIGHT,
 	modalSubmitButtonColor,
+	modalSubmitButtonTextColor,
 	false
 );
 
@@ -109,6 +119,7 @@ Button deleteModal__submitButton(
 	MODAL_SUBMIT_BUTTON_WIDTH,
 	MODAL_SUBMIT_BUTTON_HEIGHT,
 	modalSubmitButtonColor,
+	modalSubmitButtonTextColor,
 	false
 );
 
@@ -120,7 +131,7 @@ BST tree;
 void initGL(void)
 {
 	glLoadIdentity();
-	glClearColor(1.0, 1.0, 1.0, 0.0); //specifies clear values for the color buffers(R, G, B, Alpha)
+	glClearColor(mainBgColor.r, mainBgColor.g, mainBgColor.b, 0.0); //specifies clear values for the color buffers(R, G, B, Alpha)
 	glMatrixMode(GL_PROJECTION); // sets the current matrix mode
 	gluOrtho2D(0.0, WINDOW_WIDTH, 0.0, WINDOW_HEIGHT); //2D orthographic projection matrix(left, right, bottom, top)
 

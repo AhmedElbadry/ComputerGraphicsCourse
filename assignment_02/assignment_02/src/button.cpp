@@ -5,7 +5,8 @@
 #include<algorithm>
 #include"global.h"
 #include<string>
-Button::Button(string nn, double xx, double yy, double ww, double hh, Color c, bool isV) {
+#include<glut.h>
+Button::Button(string nn, double xx, double yy, double ww, double hh, Color c, Color tt, bool isV) {
 	name = nn;
 	x = xx;
 	y = yy;
@@ -14,8 +15,15 @@ Button::Button(string nn, double xx, double yy, double ww, double hh, Color c, b
 	color.r = c.r;
 	color.g = c.g;
 	color.b = c.b;
+
+	textColor.r = tt.r;
+	textColor.g = tt.g;
+	textColor.b = tt.b;
+
 	opened = false;
 	isVisible = isV;
+
+
 }
 Button::Button() {
 
@@ -25,7 +33,9 @@ void Button::draw() {
 	glColor3f(color.r, color.g, color.b);
 	double halfWidth = width / 2;
 	double hafHeight = height / 2;
-
+	double iconPercentage = 0.4;
+	double iconHalfWidth = iconPercentage * halfWidth;
+	double iconHalfHeight = iconPercentage * hafHeight;
 	glBegin(GL_POLYGON);
 		glVertex2f(x - halfWidth, y + hafHeight);
 		glVertex2f(x + halfWidth, y + hafHeight);
@@ -33,7 +43,41 @@ void Button::draw() {
 		glVertex2f(x - halfWidth, y - hafHeight);
 	glEnd();
 
-	drawText(x, y, txtColor, name);
+	glColor3f(textColor.r, textColor.g, textColor.b);
+	glLineWidth(iconLineWidth);
+	if (name == "ADD") {
+		
+		glBegin(GL_LINES);
+			glVertex2f(x, y + iconHalfHeight);
+			glVertex2f(x , y - iconHalfHeight);
+		glEnd();
+		glBegin(GL_LINES);
+			glVertex2f(x - iconHalfWidth, y);
+			glVertex2f(x + iconHalfWidth, y);
+		glEnd();
+
+		cout << "whaat" << endl;
+	}
+	else if (name == "DELETE") {
+		glBegin(GL_LINES);
+			glVertex2f(x - iconHalfWidth, y);
+			glVertex2f(x + iconHalfWidth, y);
+		glEnd();
+	}
+	else if (name == "CLOSE") {
+		glBegin(GL_LINES);
+			glVertex2f(x - iconHalfWidth, y + iconHalfHeight);
+			glVertex2f(x + iconHalfWidth, y - iconHalfHeight);
+		glEnd();
+		glBegin(GL_LINES);
+			glVertex2f(x - iconHalfWidth, y - iconHalfHeight);
+			glVertex2f(x + iconHalfWidth, y + iconHalfHeight);
+		glEnd();
+	}
+	else {
+		drawText(x, y, textColor, name);
+	}
+	
 
 
 }
