@@ -18,7 +18,7 @@ private:
 	int getLevel__private(Node* currNode);
 	void updatePositions__private(Node* currNode, int level, int col);
 	void draw__private(Node* currNode);
-
+	Node* FindMax(Node* r);
 };
 
 
