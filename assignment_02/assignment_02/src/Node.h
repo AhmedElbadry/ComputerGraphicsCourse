@@ -6,7 +6,6 @@ struct Node {
 	Node* right;
 	int level;
 	int col;
-
 	
 
 	double x;

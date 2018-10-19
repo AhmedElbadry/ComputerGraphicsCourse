@@ -56,7 +56,6 @@ void Button::draw() {
 			glVertex2f(x + iconHalfWidth, y);
 		glEnd();
 
-		cout << "whaat" << endl;
 	}
 	else if (name == "DELETE") {
 		glBegin(GL_LINES);

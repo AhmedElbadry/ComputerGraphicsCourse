@@ -24,11 +24,11 @@ const double MODAL_HEIGHT = 300;
 const double CLOSE_BUTTON_MARGIN = 10;
 const double CLOSE_BUTTON_WIDTH = 40;
 const double CLOSE_BUTTON_HEIGHT = 40;
-const double MODAL_SUBMIT_BUTTON_WIDTH = 80;
-const double MODAL_SUBMIT_BUTTON_HEIGHT = 40;
+const double MODAL_SUBMIT_BUTTON_WIDTH = 120;
+const double MODAL_SUBMIT_BUTTON_HEIGHT = 50;
 double modalX = WINDOW_WIDTH / 2;
 double modalY = WINDOW_HEIGHT / 2;
-double nodeSpeed = 0.5;
+double nodeSpeed = 0.8;
 
 
 string inputHolder;
@@ -36,9 +36,13 @@ Color mainBgColor(165 / 255.0, 145 / 255.0, 190 / 255.0);
 Color buttonColor(0.0, 0.0, 0.0);
 Color buttonTextColor(1.0, 1.0, 1.0);
 Color moadalColor(224 / 255.0, 224 / 255.0, 113 / 255.0);
+Color modalTexColor(0.0, 0.0, 0.0);
 Color modalSubmitButtonColor(0.0, 0.0, 0.0);
 Color modalSubmitButtonTextColor(1.0, 1.0, 1.0);
 
+Color nodeBGClolor(1.0, 1.0, 1.0);
+Color nodeSrokeClolor(0.0, 0.0, 0.0);
+Color nodeTextColor(0.0, 0.0, 0.0);
 Color closeButtonColor(0.0, 0.0, 0.0);
 
 Color textColor(1.0, 1.0, 1.0);
@@ -96,7 +100,7 @@ Modal addModal(
 Button addModal__submitButton(
 	"ADD NODE",
 	modalX,
-	modalY - 20,
+	modalY - 50,
 	MODAL_SUBMIT_BUTTON_WIDTH,
 	MODAL_SUBMIT_BUTTON_HEIGHT,
 	modalSubmitButtonColor,
@@ -115,7 +119,7 @@ Modal deleteModal(
 Button deleteModal__submitButton(
 	"DELETE NODE",
 	modalX,
-	modalY - 20,
+	modalY - 50,
 	MODAL_SUBMIT_BUTTON_WIDTH,
 	MODAL_SUBMIT_BUTTON_HEIGHT,
 	modalSubmitButtonColor,
@@ -153,22 +157,29 @@ void BST::draw__private(Node* currNode) {
 
 void Node::draw() {
 	
-	isInPosition = goToPos();
 	
 
+	isInPosition = goToPos();
+
+	
+	drawCircle(0, 0, 1);
 	connectWithChildren();
+	drawCircle(currX, currY, nodeRadius);
 	drawText();
+	
+	
+
+	
 }
 
 void Node::drawText() {
 
 	string str = to_string(data);
-	::drawText(currX, currY, textColor, str, GLUT_BITMAP_HELVETICA_18);
+	::drawText(currX, currY, nodeTextColor, str, GLUT_BITMAP_HELVETICA_18);
 }
 
 bool Node::goToPos() {
-	drawCircle(currX, currY, nodeRadius);
-
+	
 	double y1 = currY;
 	double x1 = currX;
 	double dy = (y - currY);
@@ -261,23 +272,31 @@ void BST::updatePositions__private(Node* currNode, int level, int col) {
 }
 
 void Node::connectWithChildren() {
+	glColor3f(nodeSrokeClolor.r, nodeSrokeClolor.g, nodeSrokeClolor.b);
+	glLineWidth(5);
 	if (left) {
 		if (left->isInPosition) {
 			glBegin(GL_LINES);
-			glVertex2f(x, y);
-			glVertex2f(left->x, left->y);
+			glVertex2f(currX, currY);
+			glVertex2f(left->currX, left->currY);
 			glEnd();
+			cout << data << " should connect with " << left->data << endl;
+			cout << "currX " << left->currX << endl;
+			cout << "currY " << left->currY << endl;
 		}
 		
 	}
 	if (right) {
 		if (right->isInPosition) {
 			glBegin(GL_LINES);
-			glVertex2f(x, y);
-			glVertex2f(right->x, right->y);
+			glVertex2f(currX, currY);
+			glVertex2f(right->currX, right->currY);
 			glEnd();
 		}
+
+		cout << data << " should connect with " << right->data << endl;
 	}
+	
 }
 
 
@@ -299,9 +318,18 @@ void drawText(double x, double y, Color cc, string str, void *font) {
 	}
 }
 void drawCircle(double x, double y, double r) {
-	glColor3f(1.0, 0.0, 0.0);
-	int iterations = 360;
+	
+	glColor3f(nodeBGClolor.r, nodeBGClolor.g, nodeBGClolor.b);
+	int iterations = 500;
 	glBegin(GL_POLYGON);
+	for (int i = 0; i < iterations; i++) {
+		double currX = r * cos(2 * PI*(i / (iterations * 1.0)));
+		double currY = r * sin(2 * PI*(i / (iterations * 1.0)));
+		glVertex2f(x + currX, y + currY);
+	}
+	glEnd();
+	glColor3f(nodeSrokeClolor.r, nodeSrokeClolor.g, nodeSrokeClolor.b);
+	glBegin(GL_LINE_LOOP);
 	for (int i = 0; i < iterations; i++) {
 		double currX = r * cos(2 * PI*(i / (iterations * 1.0)));
 		double currY = r * sin(2 * PI*(i / (iterations * 1.0)));
@@ -478,5 +506,5 @@ void Modal::close() {
 	closeButton.isVisible = false;
 }
 void Modal::showInputText() {
-	drawText(x, y + 100, textColor,  inputText, GLUT_BITMAP_HELVETICA_18);
+	drawText(x, y + 40, modalTexColor,  inputText, GLUT_BITMAP_HELVETICA_18);
 }

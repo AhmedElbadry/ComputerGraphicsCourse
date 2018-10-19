@@ -120,7 +120,7 @@ void BST::deleteNode(int x) {
 			maxLeft = maxLeft->right;
 		}
 
-		if (maxLeft == currNode->left) {
+		if (maxLeft == currNode->left) {//no max left
 			//maxLeftRoot->right = NULL;
 			//maxLeft->left = currNode->left;
 			maxLeft->right = currNode->right;
@@ -128,12 +128,11 @@ void BST::deleteNode(int x) {
 			//if (currNode == root)
 				//root = maxLeft;
 
-			if (x < r->data) {
-				r->left = maxLeft;
-			}
-			else {
-				r->right = maxLeft;
-			}
+			r->left = maxLeft;
+
+			if (currNode == root)
+				root = maxLeft;
+
 			delete currNode;
 		}
 		else {
@@ -150,34 +149,46 @@ void BST::deleteNode(int x) {
 			else {
 				r->right = maxLeft;
 			}
+			if (currNode == root)
+				root = maxLeft;
 			delete currNode;
 		}
 		
 
 	}
-	else if (currNode->left) {
+	else if (currNode->left) {//left child
 		if (x < r->data)
 			r->left = currNode->left;
 		else
 			r->right = currNode->left;
+
+		if (currNode == root)
+			root = currNode->left;
+
 		delete currNode;
 	}
-	else if (currNode->right) {
+	else if (currNode->right) {//right child
 		cout << "delete 1 child right " << endl;
 		if (x < r->data)
 			r->left = currNode->right;
 		else
 			r->right = currNode->right;
 
+		if (currNode == root)
+			root = currNode->right;
+
 		delete currNode;
 	}
-	else {
+	else {// no children
 		if (x < r->data)
 			r->left = NULL;
 		else
 			r->right = NULL;
 
-		delete currNode;
+		if (r == currNode)
+			root = NULL;
+		else
+			delete currNode;
 	}
 	
 
