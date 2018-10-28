@@ -3,6 +3,8 @@
 #include<iostream>
 #include<string>
 
+#include<fstream>
+
 
 using namespace std;
 
@@ -52,6 +54,13 @@ static unsigned int CreateShader(const string& vertexShader, const string& fragm
 
 }
 
+string readShader(string filePath)
+{
+	ifstream t(filePath);
+	string str((istreambuf_iterator<char>(t)), istreambuf_iterator<char>());
+
+	return str;
+}
 
 int main(void)
 {
@@ -77,12 +86,19 @@ int main(void)
 
 	cout << glGetString(GL_VERSION) << endl;
 
-	float positions[6] = {
-		 0.0f,  0.5f,
-		 0.5f, -0.5f,
-		-0.5f, -0.5f
+	float positions[] = {
+		 -0.5f, -0.5f,
+		  0.5f, -0.5f,
+		  0.5f, 0.5f,
+		 -0.5f, 0.5f,
 	};
 
+	unsigned int indices[] = {
+		0, 1, 2,
+		2, 3, 0
+	};
+
+	int numOpPositions = (sizeof(positions) / sizeof(*positions));
 
 	unsigned int buffer;
 	// give ID to our buffer
@@ -90,31 +106,28 @@ int main(void)
 	//select that buffer
 	glBindBuffer(GL_ARRAY_BUFFER, buffer);
 	//add data to my buffer
-	glBufferData(GL_ARRAY_BUFFER, sizeof(positions) * sizeof(float), positions, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, numOpPositions * sizeof(float), positions, GL_STATIC_DRAW);
+
+
 
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
 
 
-	string vertexShader =
-		"#version 330 core\n"
-		"\n"
-		"layout(location = 0) in vec4 position;\n"
-		"\n"
-		"void main()\n"
-		"{\n"
-		"	gl_Position = position;\n"
-		"}\n";
 
-	string fragmentShader =
-		"#version 330 core\n"
-		"\n"
-		"layout(location = 0) out vec4 color;\n"
-		"\n"
-		"void main()\n"
-		"{\n"
-		"	color = vec4(1.0, 0.0, 0.0, 1.0);\n"
-		"}\n";
+	// index buffer object
+	unsigned int ibo;
+	glGenBuffers(1, &ibo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+
+
+
+	string vertexShader = readShader("src/shaders/vertex.shader");
+
+	string fragmentShader = readShader("src/shaders/fragment.shader");
+
 
 	unsigned int shader = CreateShader(vertexShader, fragmentShader);
 	glUseProgram(shader);
@@ -126,7 +139,9 @@ int main(void)
 
 
 
-		glDrawArrays(GL_TRIANGLES, 0, sizeof(positions));
+		//glDrawArrays(GL_TRIANGLES, 0, numOpPositions/2);
+
+		glDrawElements(GL_TRIANGLES, (sizeof(indices) / sizeof(*indices)), GL_UNSIGNED_INT, nullptr);
 
 
 		/* Swap front and back buffers */
