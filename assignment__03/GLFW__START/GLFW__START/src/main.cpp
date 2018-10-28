@@ -13,6 +13,8 @@ static unsigned int CompileShader(unsigned int type, const string& source)
 	glShaderSource(id, 1, &src, nullptr);
 	glCompileShader(id);
 
+
+	// Error 
 	int result;
 	glGetShaderiv(id, GL_COMPILE_STATUS, &result);
 	if (result == GL_FALSE)
@@ -27,6 +29,8 @@ static unsigned int CompileShader(unsigned int type, const string& source)
 
 		return 0;
 	}
+
+	return id;
 }
 
 static unsigned int CreateShader(const string& vertexShader, const string& fragmentShader)
@@ -95,17 +99,17 @@ int main(void)
 	string vertexShader =
 		"#version 330 core\n"
 		"\n"
-		"laout(location = 0) in vec4 position;\n"
+		"layout(location = 0) in vec4 position;\n"
 		"\n"
 		"void main()\n"
 		"{\n"
-		"	gl_position = position;\n"
+		"	gl_Position = position;\n"
 		"}\n";
 
 	string fragmentShader =
 		"#version 330 core\n"
 		"\n"
-		"laout(location = 0) in vec4 color;\n"
+		"layout(location = 0) out vec4 color;\n"
 		"\n"
 		"void main()\n"
 		"{\n"
@@ -131,7 +135,7 @@ int main(void)
 		/* Poll for and process events */
 		glfwPollEvents();
 	}
-
+	glDeleteProgram(shader);
 	glfwTerminate();
 	return 0;
 }
