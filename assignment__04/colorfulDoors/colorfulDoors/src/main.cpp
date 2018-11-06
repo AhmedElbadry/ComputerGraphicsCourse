@@ -17,7 +17,7 @@
 
 #include "Shader.h"
 #include "texture.h"
-
+#include <math.h>
 
 
 #include "assets/libraries/imgui/imgui.h"
@@ -29,7 +29,21 @@ using namespace std;
 
 const float WINDOW_WIDTH = 960;
 const float WINDOW_HEIGHT = 540;
+const float EP = .000001;
 
+bool matC(glm::vec3 &mat, glm::vec3 &mat2) {
+	bool isChanged = false;
+
+	for (int i = 0; i < 3; i++) {
+		if (abs(mat[i] - mat2[i]) > EP) {
+			isChanged = true;
+			mat2[i] = mat[i];
+		}
+	}
+
+	return isChanged;
+
+}
 int main(void)
 {
 	GLFWwindow* window;
@@ -176,30 +190,69 @@ int main(void)
 	bool show_another_window = false;
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-	glm::vec3 transA(0, 0, 0);
-	float deg = 55;
+	
+	float deg = 180;
 
+	glm::vec3 transA(1, 0, 0);
+	glm::vec3 transAOld(1, 0, 0);
 
-	glm::vec3 transB(0, 0, 0);
+	glm::vec3 transB(1, 1, 1);
+	glm::vec3 transBOld(1, 1, 1);
 
+	glm::vec3 transC(0, 0, 0);
+	glm::vec3 transCOld(0, 0, 0);
 	glEnable(GL_DEPTH_TEST);
 
-
-
+	
+	
+	//glfwSwapInterval(20);
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
 	{
 		/* Render here */
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClearColor(.2, .3, .5, 1.0);
 
 		//renderer.draw(va, ib, shader);
 
 		ImGui_ImplGlfwGL3_NewFrame();
 
-		
-		model = glm::rotate(glm::mat4(1.0f), glm::radians(deg), transA);
-		model = translate(glm::mat4(1.0f), transB);
 
+		if (matC(transA, transAOld)) {
+			model = glm::rotate(glm::mat4(1.0f), glm::radians(deg), transA);
+			cout << "changed" << endl;
+		}
+		if (matC(transB, transBOld)) {
+			model = glm::scale(glm::mat4(1.0f), transB);
+		}
+
+		
+		//model = glm::scale(glm::mat4(1.0f), transB);
+		//model = glm::rotate(glm::mat4(1.0f), glm::radians(deg), transA);
+
+		
+		/*cout << "mode after rotate :\n";
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				cout << model[i][j] << " ";
+			}
+			cout << "\n";
+		}*/
+		
+		
+
+		/*cout << "mode after trans :\n";
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				cout << model[i][j] << " ";
+			}
+			cout << "\n";
+		}*/
+		
+		
+		
+
+		glm::mat4 view = glm::translate(glm::mat4(1.0f), transC);
 		mvp = proj * view * model;
 
 		shader.setUniformMat4f("m_mvp", mvp);
@@ -218,8 +271,9 @@ int main(void)
 		// 1. Show a simple window.
 		{
 
-			ImGui::SliderFloat3("trans A", &transA.x, -1.0f, 1.0f);
-			ImGui::SliderFloat3("trans B", &transB.x, -1, 1);
+			ImGui::SliderFloat3("trans A", &transA.x, -6.0f, 6.0f);
+			ImGui::SliderFloat3("trans B", &transB.x, -2, 2);
+			ImGui::SliderFloat3("trans C", &transC.x, -5, 5);
 			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		}
 
